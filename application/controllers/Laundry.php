@@ -65,8 +65,7 @@ class Laundry extends CI_Controller {
 	}
 	
 	public function create_new_mail(){
-		$data['onprogres']			= $this->laundry_model->list_mail();
-		$data['all']			= $this->laundry_model->all_mail();
+		$data['user']			= $this->laundry_model->get_list_user();
 		$this->load->view('laundry/new_mail',$data);
 	}
 	

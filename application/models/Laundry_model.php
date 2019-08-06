@@ -100,7 +100,7 @@
 		}
 		
 		public function mail($sid = null){
-			$query 	= "select * from (select a.*, b.pn_name from tbl_pesan a left join dk_user b on a.user_id = b.pn_id where a.user_id = '$sid' order by id desc limit 30) c order by c.id asc";
+			$query 	= "select * from (select a.*, b.pn_name, b.foto from tbl_pesan a left join dk_user b on a.user_id = b.pn_id where a.user_id = '$sid' order by id desc limit 30) c order by c.id asc";
 			$q 		= $this->db->query($query);
 			if($q->num_rows() > 0){
 				return $q->result();
@@ -125,6 +125,16 @@
 		
 		public function list_mail(){
 			$query 	= "select a.*, b.pn_name from tbl_pesan a left join dk_user b on a.user_id = b.pn_id  where a.status = '0' and a.replay != '0' group by a.user_id order by a.datetime desc";
+			$q 		= $this->db->query($query);
+			if($q->num_rows() > 0){
+				return $q->result();
+			}else{
+				return 0;
+			}
+		}
+		
+		public function get_list_user(){
+			$query 	= "select pn_id, pn_name from dk_user";
 			$q 		= $this->db->query($query);
 			if($q->num_rows() > 0){
 				return $q->result();
