@@ -185,10 +185,10 @@
               <!-- Menu toggle button -->
               <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                 <i class="fa fa-envelope-o"></i>
-                <span class="label label-success"><?php echo count($new_message);?></span>
+                <span class="label label-success"><?php if($new_message > 0){echo count($new_message);}else{echo 0;}?></span>
               </a>
               <ul class="dropdown-menu">
-                <li class="header">You have <?php echo count($new_message);?> messages</li>
+                <li class="header">You have <?php if($new_message > 0){echo count($new_message);}else{echo 0;}?> messages</li>
                 <li>
                   <!-- inner menu: contains the messages -->
                   <ul class="menu">
@@ -250,7 +250,7 @@
                 <!-- The user image in the navbar-->
                 <img src="../../dist/img/user2-160x160.jpg" class="user-image" alt="User Image">
                 <!-- hidden-xs hides the username on small devices so only the image appears. -->
-                <span class="hidden-xs">User Guest</span>
+                <span class="hidden-xs"><?php echo $this->session->userdata('pn_name');?></span>
               </a>
               <ul class="dropdown-menu">
                 <!-- The user image in the menu -->
@@ -289,10 +289,10 @@
 				if(!$this->session->userdata('logged_in')){
 				?>
 					<div class="pull-left">
-                    <button href="/index.php/login" class="btn btn-default btn-flat" id="login">Login</button>
+                    <a href="<?php echo base_url()?>index.php/login" class="btn btn-default btn-flat" id="login">Login</a>
                   </div>
                   <div class="pull-right">
-                    <button href="#" class="btn btn-default btn-flat" id="signup">Sign Up</button>
+                    <a href="#" class="btn btn-default btn-flat" id="signup">Sign Up</a>
                   </div>
 				<?php
 				}else{
@@ -301,7 +301,7 @@
                     <button href="#" class="btn btn-default btn-flat" id="profile">Profile</button>
                   </div>
                   <div class="pull-right">
-                    <button href="#" class="btn btn-default btn-flat" id="signout">Sign out</button>
+                    <a href="<?php echo base_url()?>index.php/login/logout" class="btn btn-default btn-flat" id="signout">Sign out</a>
                   </div>
 				<?php
 				}

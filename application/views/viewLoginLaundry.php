@@ -24,21 +24,30 @@
   <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
   <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
   <![endif]-->
+  <style>
+	label {
+		font-weight: unset;
+	}
+  </style>
 </head>
 <body class="hold-transition login-page"  style="background-image: url(<?=base_url()?>assets/hijau.jpg);">
 <div class="login-box" style='background-color:white;'>
-  <div class="login-logo" style="padding:20px 0px 0px 0px;">
+  <div class="login-logo" style="padding:20px 0px 0px 0px;margin-bottom:0px;">
     <a href="<?=base_url()?>index2.html"><img src="<?=base_url()?>assets/banner.jpg" width="80%" height="80%"></a>
+	<div style="padding:0px 10% 0px 10%;">
+	<label style="font-weight: 1;font-size:12px" class="pull-left">Nice Laundry V.1.0</label>
+	<label style="font-weight: 1;font-size:12px" class="pull-right">Powered By Forest-Code.com</label>
+	</div>
   </div>
   <!-- /.login-logo -->
   <div class="login-box-body content" style='background: white; /* For browsers that do not support gradients */
-    background: -webkit-linear-gradient(white, orange); /* For Safari 5.1 to 6.0 */
-    background: -o-linear-gradient(white, orange); /* For Opera 11.1 to 12.0 */
-    background: -moz-linear-gradient(white, orange); /* For Firefox 3.6 to 15 */
-    background: linear-gradient(white, orange); /* Standard syntax */'>
+    background: -webkit-linear-gradient(white, #d1dd12); /* For Safari 5.1 to 6.0 */
+    background: -o-linear-gradient(white, #d1dd12); /* For Opera 11.1 to 12.0 */
+    background: -moz-linear-gradient(white, #d1dd12); /* For Firefox 3.6 to 15 */
+    background: linear-gradient(white, #d1dd12); /* Standard syntax */'>
     <p class="login-box-msg"><h3>Login Here</h3></p>
 
-    <form action="<?=base_url()?>index.php/login/login_check" method="post">
+    <form action="<?=base_url()?>index.php/login/login_check_laundry" method="post">
       <div class="form-group has-feedback">
         <input type="text" class="form-control" name='pn_name' placeholder="User Name">
         <span class="glyphicon glyphicon-envelope form-control-feedback"></span>
@@ -57,7 +66,7 @@
         </div>
         <!-- /.col -->
         <div class="col-xs-4">
-          <button type="submit" class="btn btn-primary btn-block btn-flat">Sign In</button>
+          <button type="submit" class="btn btn-danger btn-block btn-flat">Sign In</button>
         </div>
         <!-- /.col -->
       </div>

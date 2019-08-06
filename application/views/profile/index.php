@@ -167,7 +167,7 @@
 							  <label>
 								<input type="checkbox" id="private"> Private Message
 							  </label>
-							  <button class="btn btn-primary pull-right" id="send">Kirim</button>
+							  <button class="btn btn-primary pull-right" onclick="return send('','')">Kirim</button>
 							</div>
 						  </div>
 						</div>
@@ -176,11 +176,20 @@
 					  <div class="box-footer" id="last_comment">
 					  <?php if($data_message > 0){
 						  foreach($data_message as $row){
+							  if($row->user_id == '1002'){
+								  
+									$img = base_url().'assets/budiana-profile.jpeg';
+									
+								}else{
+								
+									$img = base_url().'assets/img_webcam.png';
+								
+								}
 						  ?>
 						<div class="user-block" style="text-align:left">
-							<img class="img-circle img-bordered-sm" src="<?php echo base_url()?>assets/img_webcam.png" alt="user image">
+							<img class="img-circle img-bordered-sm" src="<?php echo $img;?>" alt="user image">
 								<span class="username">
-								  <a href="#">Anonim</a>
+								  <a href="#"><?php echo $row->user_name?></a>
 								  <a href="#" class="pull-right btn-box-tool"><i class="fa fa-times"></i></a>
 								</span>
 							<span class="description">Shared publicly - <?php echo date('d M Y H:i:s',strtotime($row->datetime))?></span>
@@ -260,7 +269,7 @@
 		document.getElementById('success-info').innerHTML = '<img width="100%" src="<?php echo base_url();?>assets/'+x+'.jpg">';
 	}
 	
-	$('#send').click(function(){
+	function send(parent=null, to=null){
 		var private_ = 0;
 		if(document.getElementById('private').checked == true){
 			var private_ = 1;
@@ -276,7 +285,7 @@
 			url: '<?php echo base_url()?>index.php/profile/save',
 			type: "POST",
 			data: {
-				message : $('#message').val(), private : private_
+				message : $('#message').val(), private : private_, parent : parent, to : to
 			},
 			success: function(datax) {
 				document.getElementById('success-info-comment').innerHTML = '';
@@ -284,10 +293,16 @@
 				$('#success-info-comment').append('Your message is in our review, to be published');
 				var data_s = JSON.parse(datax);
 				if(data_s.view != '1'){
+					if(data_s.user_id == '1002'){
+						var img = '<?php echo base_url()?>assets/budiana-profile.jpeg';
+					}else{
+						var img = '<?php echo base_url()?>assets/img_webcam.png';
+						
+					}
 					$('#last_comment').prepend('<div class="user-block" style="text-align:left">'+
-							'<img class="img-circle img-bordered-sm" src="<?php echo base_url()?>assets/img_webcam.png" alt="user image">'+
+							'<img class="img-circle img-bordered-sm" src="'+img+'" alt="user image">'+
 								'<span class="username">'+
-								  '<a href="#">Anonim</a>'+
+								  '<a href="#">'+data_s.user_name+'</a>'+
 								  '<a href="#" class="pull-right btn-box-tool"><i class="fa fa-times"></i></a>'+
 								'</span>'+
 							'<span class="description">Shared publicly - '+data_s.datetime+'</span>'+
@@ -299,7 +314,7 @@
 				}
 			}
 		});
-	});
+	};
 	
 	$.ajax({
 		url: '<?php echo base_url()?>index.php/profile/education',

@@ -20,14 +20,33 @@ class Profile extends CI_Controller {
 	
 	public function load(){
 		$data['judul']				= "My Profile";
-		$data['data_message']			= $this->profile_model->load_message_all();
-		$this->load->view('profile/load',$data);
+		$temp = array();
+		$data			= $this->profile_model->load_message_all();
+		if($data > 0){
+			foreach($data as $row){
+				$detail			= $this->profile_model->load_message_all_detail($row->id);
+				$row->detail	= $detail;
+				array_push($temp, $row);
+			}
+		}
+		$data2['data_message'] = $temp;
+		$data2['new_message']			= $this->profile_model->new_message();
+		$this->load->view('profile/load',$data2);
 	}
 	
 	public function save(){
 		$param = $this->input->post();
 		$param['datetime'] = date('Y-m-d H:i:s');
 		$param['view'] = 1;
+		$param['user_id'] = $this->session->userdata('pn_id');
+		$param['user_name'] = $this->session->userdata('pn_name');
+		if(empty($param['user_id'])){
+			$param['user_id'] = '0';
+			$param['user_name'] = 'Anonim';
+		}
+		if($this->session->userdata('pn_id') == '1002'){
+			$param['view'] = 0;
+		}
 		$this->profile_model->save($param);
 		$param['datetime'] = date('d M Y H:i:s',strtotime($param['datetime']));
 		echo json_encode($param);
