@@ -9,9 +9,26 @@
 		//status = 0 belum dibaca. 1 sudah dibaca //pesan
 		//status_reading = 0 belum dibaca. 1 sudah dibaca //transaksi
 		
-		public function onprogres(){
+		public function onprogres($id = null){
 			$sid = $this->session->userdata('pn_id_laundry');
-			$query 	= "select * from tbl_transaksi where user_id = '$sid' and status != 'diterima' or status_reading = '0' order by selesai";
+			$where = "where user_id = '$sid'";
+			if($this->session->userdata('jabatan') == 0){
+				$where = "";
+			}
+			
+			$where_id = "";
+			if(!empty($where) && !empty($id)){
+				$where_id = " and id= '$id'";
+			}else if(empty($where) && !empty($id)){
+				$where_id = " where id= '$id'";
+			}
+			
+			
+			$query 	= "select * from tbl_transaksi $where $where_id ORDER BY
+							STATUS,
+							status_bayar asc,
+							id DESC";
+	
 			$q 		= $this->db->query($query);
 			if($q->num_rows() > 0){
 				return $q->result();
@@ -188,10 +205,47 @@
 			$this->db->where('id',$sid);
 			$this->db->update('tbl_transaksi',$param);
 			$this->db->query("update tbl_transaksi set bayar = bayar + $bayar where id='$sid'");
+			
+			$xUser			= $this->db->query("select * from tbl_transaksi where id='$sid'");
+			$ret 			= $xUser->result();
+			$user_id		= $ret[0]->user_id;
+			$harga		= $ret[0]->harga;
+			if($ret[0]->harga <= $ret[0]->bayar){
+				$this->db->query("update tbl_transaksi set status_bayar = 'lunas' where id='$sid'");
+				$status_bayar = 'lunas';
+			}else{
+				$this->db->query("update tbl_transaksi set status_bayar = 'belum lunas' where id='$sid'");
+				$status_bayar = 'belum lunas';
+			}
+			
+			
+			$param_act = array(
+								'id_transaksi' => $this->db->insert_id(),
+								'id_user' => $user_id,
+								'bayar' => $param['bayar'],
+								'harga' => $harga,
+								'status_bayar' => $status_bayar,
+								'status_laundry' => $param['status'],
+								'create_date' => date("Y-m-d H:i:s"),
+								'user' => $this->session->userdata('pn_id_laundry'),
+								);
+			$this->db->insert('tbl_timeline',$param_act);
 		}
 		
 		public function save_transaksi($param){
-			$this->db->insert('tbl_transaksi',$param);
+			$id = $this->db->insert('tbl_transaksi',$param);
+			$param_act = array(
+								'id_transaksi' => $this->db->insert_id(),
+								'id_user' => $param['user_id'],
+								'bayar' => $param['bayar'],
+								'harga' => $param['harga'],
+								'status_bayar' => $param['status_bayar'],
+								'status_laundry' => 'onprogres',
+								'create_date' => $param['insert'],
+								'user' => $this->session->userdata('pn_id_laundry'),
+								);
+
+			$this->db->insert('tbl_timeline',$param_act);
 		}
 		
 		public function save_user($param){
@@ -258,7 +312,7 @@
 							'nm_supplier'	=> $supplier[1],
 							'harga'			=> $harga,
 							'barang_stock'	=> "N",
-							'insert_by'		=> $this->session->userdata('pn_name'),
+							'insert_by'		=> $this->session->userdata('pn_name_laundry'),
 							'insert_date'	=> date("Y-m-d"),
 							'sts'			=> $sts			
 						);

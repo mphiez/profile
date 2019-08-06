@@ -23,6 +23,12 @@ class Laundry extends CI_Controller {
 		$this->load->view('laundry/onprogres',$data);
 	}
 	
+	public function load_transaksi(){
+		$id = $this->input->post('id');
+		$data = $this->laundry_model->onprogres($id);
+		echo json_encode($data);
+	}
+	
 	public function information(){
 		$data['onprogres']			= $this->laundry_model->onprogres();
 		$this->load->view('laundry/information',$data);

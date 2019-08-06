@@ -17,6 +17,7 @@
 						<tr>
 							<td width="20%"><img style="border-radius: 50%;padding: 8px;" src="<?php echo base_url()?>assets/<?php echo $onprogres[0]->foto?>" height="50px" width="50px"> </td>
 							<td><?php echo $onprogres[0]->pn_name?></td>
+							<td style="text-align:right"><i class="fa fa-envelope-o"></i></td>
 						</tr>
 					</table>
 				</div>

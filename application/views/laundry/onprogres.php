@@ -71,7 +71,7 @@
 							<td>Status Pembayaran</td>
 							<td>
 							<select id="status_bayar" class="form-control">
-								<option value='belumlunas'>Belum Lunas</option>
+								<option value='belum lunas'>Belum Lunas</option>
 								<option value='lunas'>Lunas</option>
 							</select>
 							</td>
@@ -115,6 +115,28 @@
 					$('#status').val('');
 					$('#tanggal_diterima').val('');
 					$('#diterima_oleh').val('');
+					
+					
+					$.ajax({
+						url: '<?php echo base_url()?>index.php/laundry/load_transaksi',
+						type: "POST",
+						data: {
+							id : x
+						},
+						success: function(datax) {
+							datax = JSON.parse(datax);
+							$.each(datax,function(i, item){
+								$('#status_bayar').val(item.status_bayar);
+								$('#status').val(item.status);
+								$('#diterima_oleh').val(item.diterima_oleh);
+								$('#tanggal_diterima').val(item.tanggal_diterima);
+							});
+							
+						}
+					});
+					
+					
+					
 					$('#modal-user').modal();
 				}
 				

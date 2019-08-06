@@ -1,13 +1,13 @@
 			<div >
 				<div class="col-md-12">
-					<div class="row">
-						<button onclick="return new_mail()" class="btn btn-danger">Pesan Baru</button>
+					<div class="col-md-4">
+							<button onclick="return new_mail()" class="btn btn-danger form-control"><i class="fa fa-envelope-o"></i> Pesan Baru</button>
 					</div>
 				</div>
 				<div>
 				<?php if($onprogres > 0){?>
 				<label>New Message</label>
-				<table class="table table-strips table-hover" id="example">
+				<table class="table table-strips table-hover">
 					<thead>
 					<tr>
 						<th>Tanggal</th>
@@ -30,7 +30,7 @@
 				<?php } ?>
 				
 				<?php if($all > 0){?>
-				<table class="table table-strips table-hover" id="example2">
+				<table class="table table-strips table-hover">
 					<thead>
 					<tr>
 						<th>Tanggal</th>
@@ -53,8 +53,8 @@
 				<?php } ?>
 			</div>
 			<script>
-				$("#example").DataTable();
-				$("#example2").DataTable();
+				///$("#example").DataTable();
+				//$("#example2").DataTable();
 				function edit_user(x = null){
 					document.getElementById('onprogres').innerHTML = '';
 					$("#body-content").slideUp();
