@@ -33,6 +33,20 @@ class Login extends CI_Controller {
 		$this->load->view('viewLoginLaundry', $data);
 	}
 	
+	public function macharone(){
+		if(isset($this->error_massage)){
+			$data = array(
+			   'message' => $this->error_massage
+			);
+		}
+		else {
+			$data = array(
+			   'message' => ''
+			);
+		}
+		$this->load->view('viewLoginMacharone', $data);
+	}
+	
 	public function login_kas(){
 		if(isset($this->error_massage)){
 			$data = array(
@@ -107,6 +121,37 @@ class Login extends CI_Controller {
 		}
 	}
 	
+	function login_check_macharone(){
+		
+		$data = array(
+			'pn_uname' => $this->input->post('pn_name'),
+			'pn_pass' => md5($this->input->post('pn_pass'))
+		);
+		$query = $this->login_model->check_login($data);
+		if($query->num_rows() > 0){
+			$row = $query->row();
+			$data = array(
+				'pn_id_macharone' 	=> $row->pn_id,
+				'pn_uname_macharone' 	=> $row->pn_uname,
+				'pn_name_macharone' 	=> $row->pn_name,
+				'jabatan_macharone'  			=> $row->pn_jabatan,
+				'pn_wilayah_macharone'=> $row->pn_wilayah,
+				'pn_akses_macharone'	=> $row->pn_akses,
+				'marketing_macharone'	=> $row->sts_marketing,
+				'foto_macharone'	=> $row->foto,
+				'alamat_macharone'	=> $row->alamat,
+				'logged_in_macharone' => TRUE
+			);  
+			$this->session->set_userdata($data);
+			$this->all_model->log_login($row->pn_id,$row->pn_uname,$row->pn_jabatan,$row->pn_wilayah);
+			redirect('macharone');
+		}
+		else{
+			$this->error_massage = 'Wrong email or password!';
+			redirect('login/macharone');
+		}
+	}
+	
 	function login_check_kas(){
 		
 		$data = array(
@@ -141,6 +186,11 @@ class Login extends CI_Controller {
 	public function logout_laundry(){
 		$this->session->sess_destroy();
 		redirect('login/laundry');
+	}
+		
+	public function logout_macharone(){
+		$this->session->sess_destroy();
+		redirect('login/macharone');
 	}
 		
 	public function logout_kas(){
